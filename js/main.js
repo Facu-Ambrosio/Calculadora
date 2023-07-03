@@ -1,40 +1,46 @@
-const numToArray = (num) => {
-  return num.toString().split("");
-};
-
-const cambioSqrt = (array) => {
-  array[array.indexOf("√(")] = "Math.sqrt(";
-};
-
-const operacion = (array) => {
-  if(array.includes("√(")){
-    cambioSqrt(array);
+const operacion = (cuenta) => {
+  try {
+    let resultado = eval(cuenta).toString();
+    if (resultado === "Infinity"){
+      return "Indeterminado"
+    } else {
+      return resultado;
+    }
+  } catch (error) {
+    return "Operacion no valida"
   }
-  let cuenta = array.join("");
-  let resultado = numToArray(eval(cuenta));
-  return resultado;
 };
 
-const displayOperacion = (array) => {
-  let operacion = array.join("");
-  $("#resultado").html(`${operacion}`);
+const borrar = (numero) => {
+  return numero.slice(0,-1) ;
+};
+
+const mostrarEnDisplay = (numero, display) => {
+  display.innerHTML = `${numero}`;
 };
 
 const numeros = (e) => {
-  let digito = (e.target).innerText; //digito oprimido
-  if (digito === "="){
-    arrayDeNumeros = operacion(arrayDeNumeros);
-  } else if(digito === "⌫"){
-    arrayDeNumeros.pop();
-  } else if(digito === "AC"){
-    arrayDeNumeros = [];
-  } else {
-    arrayDeNumeros.push(digito); //ubicar digito en orden
+  let digito = (e.target).innerText; 
+  let display = document.getElementById("resultado");
+  if (num0 === "Operacion no valida" || num0 === "Indeterminado"){
+    num0 = "";
   }
-  displayOperacion(arrayDeNumeros);
-  console.log(arrayDeNumeros);
+  switch (digito) {
+    case "=":
+      num0 = operacion(num0);
+      break;
+    case "AC":
+      num0 = "";
+      break;
+    case "⌫":
+      num0 = borrar(num0);
+      break;
+    default:
+      num0 += digito;
+      break;
+  }
+  mostrarEnDisplay(num0, display);
 };
 
-let arrayDeNumeros = [];
-
+let num0 = "";
 $("span").on("click", numeros);
